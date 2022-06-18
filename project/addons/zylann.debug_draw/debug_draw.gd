@@ -33,13 +33,9 @@ var _line_material_pool := []
 
 
 func _ready():
-	# Get default font
-	# Meh
-	var c := Control.new()
-	add_child(c)
-	_font = c.get_font("font")
-	c.queue_free()
-
+	_font = DynamicFont.new()
+	_font.font_data = load("res://assets/fonts/noto-sans-ui-regular.ttf")
+	_font.size = 12
 
 ## @brief Draws the unshaded outline of a 3D box.
 ## @param position: world-space position of the center of the box
@@ -183,7 +179,7 @@ func _on_CanvasItem_draw():
 
 	for key in _texts.keys():
 		var t = _texts[key]
-		var text := str(key, ": ", t.text, "\n")
+		var text := str(key, ": ", t.text)
 		var ss := _font.get_string_size(text)
 		ci.draw_rect(Rect2(pos, Vector2(ss.x + xpad * 2, line_height)), TEXT_BG_COLOR)
 		ci.draw_string(_font, pos + font_offset, text, TEXT_COLOR)
