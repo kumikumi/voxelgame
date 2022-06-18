@@ -48,7 +48,7 @@ func _physics_process(delta):
 	var motion = _velocity * delta
 	
 	if has_node(terrain):
-		var aabb = AABB(Vector3(-0.4, -0.9, -0.4), Vector3(0.8, 1.8, 0.8))
+		var aabb = AABB(Vector3(-0.4, 0.0, -0.4), Vector3(0.8, 1.8, 0.8))
 		var terrain_node = get_node(terrain)
 		motion = _box_mover.get_motion(get_translation(), motion, aabb, terrain_node)
 		global_translate(motion)

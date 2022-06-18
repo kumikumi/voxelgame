@@ -22,7 +22,7 @@ jump_force = 8.0
 head = NodePath("Camera")
 
 [node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.702764, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0 )
 current = true
 fov = 90.0
 near = 0.1
@@ -49,6 +49,7 @@ omni_range = 10.0
 omni_attenuation = 2.54912
 
 [node name="MeshInstance" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0 )
 mesh = SubResource( 2 )
 material/0 = null
 
@@ -56,9 +57,6 @@ material/0 = null
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TextureRect" type="TextureRect" parent="CenterContainer"]
 margin_left = 504.0
@@ -69,4 +67,3 @@ mouse_filter = 2
 texture = ExtResource( 4 )
 
 [node name="VoxelViewer" type="VoxelViewer" parent="."]
-view_distance = 128
