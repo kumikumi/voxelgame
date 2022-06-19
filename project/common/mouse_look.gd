@@ -1,8 +1,8 @@
 extends Spatial
 
-export var sensitivity = 0.4
-export var min_angle = -90
-export var max_angle = 90
+export var sensitivity = 0.006
+const MIN_ANGLE = -0.5*PI
+const MAX_ANGLE = 0.5*PI
 export var capture_mouse = true
 export var distance = 5.0
 
@@ -42,11 +42,11 @@ func _unhandled_input(event):
 			_pitch += motion.y * sensitivity
 			
 			# Clamp pitch
-			var e = 0.001
-			if _pitch > max_angle-e:
-				_pitch = max_angle-e
-			elif _pitch < min_angle+e:
-				_pitch = min_angle+e
+			var e = 0.0001
+			if _pitch > MAX_ANGLE-e:
+				_pitch = MAX_ANGLE-e
+			elif _pitch < MIN_ANGLE+e:
+				_pitch = MIN_ANGLE+e
 			
 			# Apply rotations
 			update_rotations()
@@ -65,8 +65,8 @@ func _unhandled_input(event):
 
 func update_rotations():
 	set_translation(Vector3())
-	set_rotation(Vector3(0, deg2rad(_yaw), 0))
-	rotate(get_transform().basis.x.normalized(), -deg2rad(_pitch))
+	set_rotation(Vector3(0, _yaw, 0))
+	rotate(get_transform().basis.x.normalized(), -_pitch)
 	set_translation(get_transform().basis.z * distance + _offset)
 
 

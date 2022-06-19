@@ -28,7 +28,7 @@ fov = 90.0
 near = 0.1
 far = 500.0
 script = ExtResource( 2 )
-sensitivity = 0.3
+sensitivity = 0.006
 distance = 4.0
 
 [node name="Interaction" type="Node" parent="."]
