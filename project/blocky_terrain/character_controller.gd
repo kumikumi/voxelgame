@@ -1,4 +1,4 @@
-extends Spatial
+extends KinematicBody
 
 export var speed = 5.0
 export var gravity = 9.8
@@ -10,7 +10,6 @@ export(NodePath) var head = null
 export(NodePath) var terrain = null
 
 var _velocity = Vector3()
-var _grounded = false
 var _head = null
 var _box_mover = VoxelBoxMover.new()
 
@@ -20,6 +19,9 @@ func _ready():
 
 func _process(_delta):
 	DDD.set_text("FPS", Engine.get_frames_per_second());
+	DDD.set_text("On floor", is_on_floor());
+	DDD.set_text("On wall", is_on_wall());
+	DDD.set_text("On ceiling", is_on_ceiling());
 
 func _physics_process(delta):
 	var forward = _head.get_transform().basis.z.normalized()
@@ -42,21 +44,8 @@ func _physics_process(delta):
 	_velocity.z = motor.z
 	_velocity.y -= gravity * delta
 	
-	#if _grounded and Input.is_key_pressed(KEY_SPACE):
+	#if is_on_floor() and Input.is_key_pressed(KEY_SPACE):
 	if Input.is_key_pressed(KEY_SPACE):
 		_velocity.y = jump_force
-		#_grounded = false
 	
-	var motion = _velocity * delta
-	
-	if has_node(terrain):
-		var aabb = AABB(Vector3(-0.4, 0.0, -0.4), Vector3(0.8, 1.8, 0.8))
-		var terrain_node = get_node(terrain)
-		motion = _box_mover.get_motion(get_translation(), motion, aabb, terrain_node)
-		global_translate(motion)
-
-	assert(delta > 0)
-	_velocity = motion / delta
-
-
-
+	var _result = move_and_slide(_velocity)

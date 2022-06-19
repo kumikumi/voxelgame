@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://blocky_terrain/character_controller.gd" type="Script" id=1]
 [ext_resource path="res://common/mouse_look.gd" type="Script" id=2]
@@ -14,7 +14,10 @@ roughness = 0.0
 [sub_resource type="CubeMesh" id=2]
 size = Vector3( 0.8, 1.8, 0.8 )
 
-[node name="CharacterAvatar" type="Spatial"]
+[sub_resource type="BoxShape" id=3]
+extents = Vector3( 0.4, 0.9, 0.4 )
+
+[node name="CharacterAvatar" type="KinematicBody"]
 script = ExtResource( 1 )
 speed = 10.0
 gravity = 40.0
@@ -67,3 +70,7 @@ mouse_filter = 2
 texture = ExtResource( 4 )
 
 [node name="VoxelViewer" type="VoxelViewer" parent="."]
+
+[node name="CollisionShape" type="CollisionShape" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0 )
+shape = SubResource( 3 )

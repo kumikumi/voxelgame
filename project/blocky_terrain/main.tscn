@@ -48,7 +48,6 @@ transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0 )
 generator = ExtResource( 4 )
 mesher = SubResource( 3 )
 max_view_distance = 256
-generate_collisions = false
 material/0 = ExtResource( 2 )
 material/1 = ExtResource( 3 )
 
@@ -57,7 +56,7 @@ transform = Transform( -0.985468, 0.124099, -0.11598, 0.0154004, 0.745271, 0.666
 directional_shadow_normal_bias = 0.1
 
 [node name="CharacterAvatar" parent="." instance=ExtResource( 6 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.002, 11, 11.65 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -18.1491, 7.35447, 0 )
 head = NodePath("../../Main/CharacterAvatar/Camera")
 terrain = NodePath("../../Main/VoxelTerrain")
 
