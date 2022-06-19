@@ -18,6 +18,8 @@ var _box_mover = VoxelBoxMover.new()
 func _ready():
 	_head = get_node(head)
 
+func _process(_delta):
+	DDD.set_text("FPS", Engine.get_frames_per_second());
 
 func _physics_process(delta):
 	var forward = _head.get_transform().basis.z.normalized()
