@@ -89,17 +89,6 @@ func _unhandled_input(event):
 				BUTTON_RIGHT:
 					_action_remove = true
 
-	elif event is InputEventKey:
-		if event.pressed:
-			match event.scancode:
-				KEY_1:
-					select_inventory(0)
-				KEY_2:
-					select_inventory(1)
-				KEY_3:
-					select_inventory(2)
-
-
 func select_inventory(i):
 	if i < 0 or i >= len(_inventory):
 		return
