@@ -2,7 +2,7 @@ extends KinematicBody
 
 export var speed = 5.0
 export var gravity = 9.8
-export var jump_force = 5.0
+export var jump_force = 10.0
 export(NodePath) var head = null
 
 # Not used in this script, but might be useful for child nodes because
@@ -51,8 +51,7 @@ func _physics_process(delta):
 	_velocity.z = motor.z
 	_velocity.y -= gravity * delta
 	
-	#if is_on_floor() and Input.is_key_pressed(KEY_SPACE):
-	if Input.is_key_pressed(KEY_SPACE):
+	if is_on_floor() and Input.is_key_pressed(KEY_SPACE):
 		_velocity.y = jump_force
 	
 	var _result = move_and_slide(_velocity, Vector3.UP)

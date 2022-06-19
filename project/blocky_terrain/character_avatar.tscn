@@ -69,6 +69,7 @@ mouse_filter = 2
 texture = ExtResource( 4 )
 
 [node name="VoxelViewer" type="VoxelViewer" parent="."]
+view_distance = 64
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0 )
