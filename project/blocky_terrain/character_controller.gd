@@ -12,6 +12,7 @@ export(NodePath) var terrain = null
 var _velocity = Vector3()
 var _head = null
 var _box_mover = VoxelBoxMover.new()
+var initial_load_done: bool = false
 
 
 func _ready():
@@ -22,8 +23,14 @@ func _process(_delta):
 	DDD.set_text("On floor", is_on_floor());
 	DDD.set_text("On wall", is_on_wall());
 	DDD.set_text("On ceiling", is_on_ceiling());
+	if !initial_load_done:
+		var tasks = VoxelServer.get_stats().get("tasks")
+		if tasks.generation == 0 and tasks.meshing == 0 and tasks.main_thread == 0 and tasks.streaming == 0:
+			initial_load_done = true
 
 func _physics_process(delta):
+	if !initial_load_done:
+		return
 	var forward = _head.get_transform().basis.z.normalized()
 	forward = Plane(Vector3(0, 1, 0), 0).project(forward)
 	var right = _head.get_transform().basis.x.normalized()
@@ -48,4 +55,4 @@ func _physics_process(delta):
 	if Input.is_key_pressed(KEY_SPACE):
 		_velocity.y = jump_force
 	
-	var _result = move_and_slide(_velocity)
+	var _result = move_and_slide(_velocity, Vector3.UP)
