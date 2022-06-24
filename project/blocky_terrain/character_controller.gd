@@ -59,7 +59,7 @@ func set_duck_camera():
 func _physics_process(delta):
 	if !initial_load_done:
 		return
-	player_move()
+	player_move(delta)
 	
 	var forward = _head.get_transform().basis.z.normalized()
 	forward = Plane(Vector3(0, 1, 0), 0).project(forward)
@@ -79,7 +79,6 @@ func _physics_process(delta):
 	
 	_velocity.x = motor.x
 	_velocity.z = motor.z
-	_velocity.y -= gravity * delta
 	
 	if is_on_floor() and Input.is_action_pressed("jump"):
 		_velocity.y = jump_force
@@ -90,9 +89,10 @@ func reduce_timers(delta: float):
 	if (_duck_time > 0):
 		_duck_time = max(0, _duck_time - delta*1000)
 
-func player_move():
+func player_move(delta):
 	# Todo: Handle water code, ladder code, spectator mode etc.
 	player_move_duck()
+	player_move_add_gravity(delta)
 
 func player_move_duck():
 	if !(Input.is_action_pressed("duck") or _in_duck or _fully_ducking):
@@ -150,3 +150,7 @@ func player_move_unduck():
 	_duck_time = 0
 	_fully_ducking = false
 	_in_duck = false
+
+func player_move_add_gravity(delta):
+	# Todo: check for water jump time
+	_velocity.y -= gravity * delta
