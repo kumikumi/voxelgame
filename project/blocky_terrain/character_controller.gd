@@ -66,13 +66,13 @@ func _physics_process(delta):
 	var right = _head.get_transform().basis.x.normalized()
 	var motor = Vector3()
 	
-	if Input.is_key_pressed(KEY_UP) or Input.is_key_pressed(KEY_Z) or Input.is_key_pressed(KEY_W):
+	if Input.is_action_pressed("forward"):
 		motor -= forward
-	if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
+	if Input.is_action_pressed("back"):
 		motor += forward
-	if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_Q) or Input.is_key_pressed(KEY_A):
+	if Input.is_action_pressed("moveleft"):
 		motor -= right
-	if Input.is_key_pressed(KEY_RIGHT) or Input.is_key_pressed(KEY_D):
+	if Input.is_action_pressed("moveright"):
 		motor += right
 	
 	motor = motor.normalized() * speed
@@ -81,7 +81,7 @@ func _physics_process(delta):
 	_velocity.z = motor.z
 	_velocity.y -= gravity * delta
 	
-	if is_on_floor() and Input.is_key_pressed(KEY_SPACE):
+	if is_on_floor() and Input.is_action_pressed("jump"):
 		_velocity.y = jump_force
 	
 	var _result = move_and_slide(_velocity, Vector3.UP)
