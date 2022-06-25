@@ -19,9 +19,6 @@ extents = Vector3( 0.4, 0.9, 0.4 )
 
 [node name="CharacterAvatar" type="KinematicBody"]
 script = ExtResource( 1 )
-speed = 10.0
-gravity = 40.0
-jump_force = 8.0
 head = NodePath("Camera")
 
 [node name="Camera" type="Camera" parent="."]

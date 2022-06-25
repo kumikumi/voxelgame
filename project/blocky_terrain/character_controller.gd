@@ -7,7 +7,7 @@ const TIME_TO_DUCK = 0.4
 export var acceleration = 1.66
 export var friction = 0.3
 export var gravity = 9.8
-export var jump_force = 10.0
+export var jump_force = 5.0
 export(NodePath) var head = null
 
 # Not used in this script, but might be useful for child nodes because
