@@ -4,7 +4,7 @@ const CAMERA_HEIGHT_STANDING = 1.6
 const CAMERA_HEIGHT_DUCKED = 0.7
 const TIME_TO_DUCK = 0.4
 
-export var speed = 5.0
+export var acceleration = 0.5
 export var gravity = 9.8
 export var jump_force = 10.0
 export(NodePath) var head = null
@@ -75,10 +75,10 @@ func _physics_process(delta):
 	if Input.is_action_pressed("moveright"):
 		motor += right
 	
-	motor = motor.normalized() * speed
+	motor = motor.normalized() * acceleration
 	
-	_velocity.x = motor.x
-	_velocity.z = motor.z
+	_velocity.x += motor.x
+	_velocity.z += motor.z
 	
 	if is_on_floor() and Input.is_action_pressed("jump"):
 		_velocity.y = jump_force
