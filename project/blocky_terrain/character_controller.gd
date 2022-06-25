@@ -62,9 +62,6 @@ func _physics_process(delta):
 		return
 	player_move(delta)
 	
-	if is_on_floor() and Input.is_action_pressed("jump"):
-		_velocity.y = jump_force
-	
 	var _result = move_and_slide(_velocity, Vector3.UP)
 
 func reduce_timers(delta: float):
@@ -78,6 +75,7 @@ func player_move(delta):
 	player_move_friction()
 	if is_on_floor():
 		player_move_accelerate()
+	player_move_jump()
 
 func player_move_duck():
 	if !(Input.is_action_pressed("duck") or _in_duck or _fully_ducking):
@@ -167,3 +165,7 @@ func player_move_accelerate():
 	
 	_velocity.x += motor.x
 	_velocity.z += motor.z
+
+func player_move_jump():
+	if is_on_floor() and Input.is_action_just_pressed("jump"):
+		_velocity.y = jump_force
