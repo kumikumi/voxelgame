@@ -4,7 +4,8 @@ const CAMERA_HEIGHT_STANDING = 1.6
 const CAMERA_HEIGHT_DUCKED = 0.7
 const TIME_TO_DUCK = 0.4
 
-export var acceleration = 0.5
+export var acceleration = 1.66
+export var friction = 0.3
 export var gravity = 9.8
 export var jump_force = 10.0
 export(NodePath) var head = null
@@ -61,25 +62,6 @@ func _physics_process(delta):
 		return
 	player_move(delta)
 	
-	var forward = _head.get_transform().basis.z.normalized()
-	forward = Plane(Vector3(0, 1, 0), 0).project(forward)
-	var right = _head.get_transform().basis.x.normalized()
-	var motor = Vector3()
-	
-	if Input.is_action_pressed("forward"):
-		motor -= forward
-	if Input.is_action_pressed("back"):
-		motor += forward
-	if Input.is_action_pressed("moveleft"):
-		motor -= right
-	if Input.is_action_pressed("moveright"):
-		motor += right
-	
-	motor = motor.normalized() * acceleration
-	
-	_velocity.x += motor.x
-	_velocity.z += motor.z
-	
 	if is_on_floor() and Input.is_action_pressed("jump"):
 		_velocity.y = jump_force
 	
@@ -93,6 +75,9 @@ func player_move(delta):
 	# Todo: Handle water code, ladder code, spectator mode etc.
 	player_move_duck()
 	player_move_add_gravity(delta)
+	player_move_friction()
+	if is_on_floor():
+		player_move_accelerate()
 
 func player_move_duck():
 	if !(Input.is_action_pressed("duck") or _in_duck or _fully_ducking):
@@ -154,3 +139,31 @@ func player_move_unduck():
 func player_move_add_gravity(delta):
 	# Todo: check for water jump time
 	_velocity.y -= gravity * delta
+
+func player_move_friction():
+	if !is_on_floor():
+		return
+	# Add friction
+	_velocity.x = lerp(_velocity.x, 0, friction)
+	_velocity.z = lerp(_velocity.z, 0, friction)
+
+func player_move_accelerate():
+	var forward = _head.get_transform().basis.z.normalized()
+	forward = Plane(Vector3(0, 1, 0), 0).project(forward)
+	var right = _head.get_transform().basis.x.normalized()
+	
+	var motor = Vector3()
+	
+	if Input.is_action_pressed("forward"):
+		motor -= forward
+	if Input.is_action_pressed("back"):
+		motor += forward
+	if Input.is_action_pressed("moveleft"):
+		motor -= right
+	if Input.is_action_pressed("moveright"):
+		motor += right
+	
+	motor = motor.normalized() * acceleration
+	
+	_velocity.x += motor.x
+	_velocity.z += motor.z
