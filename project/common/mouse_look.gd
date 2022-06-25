@@ -4,7 +4,7 @@ export var sensitivity = 0.006
 const MIN_ANGLE = -0.5*PI
 const MAX_ANGLE = 0.5*PI
 export var capture_mouse = true
-export var distance = 5.0
+export var distance = 0
 
 var _yaw = 0
 var _pitch = 0
