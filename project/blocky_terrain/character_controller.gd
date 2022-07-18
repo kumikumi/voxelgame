@@ -8,6 +8,7 @@ export var acceleration = 1.66
 export var friction = 0.3
 export var gravity = 9.8
 export var jump_force = 5.0
+var step_size = 0.6
 export(NodePath) var head = null
 
 # Not used in this script, but might be useful for child nodes because
@@ -35,6 +36,7 @@ func _process(_delta):
 	DDD.set_text("On floor", is_on_floor());
 	DDD.set_text("On wall", is_on_wall());
 	DDD.set_text("On ceiling", is_on_ceiling());
+	DDD.set_text("Velocity", _velocity);
 	if !initial_load_done:
 		var tasks = VoxelServer.get_stats().get("tasks")
 		if tasks.generation == 0 and tasks.meshing == 0 and tasks.main_thread == 0 and tasks.streaming == 0:
@@ -62,7 +64,8 @@ func _physics_process(delta):
 		return
 	player_move(delta)
 	
-	var _result = move_and_slide(_velocity, Vector3.UP)
+	# todo: remove this and do movement elsewhere
+	_velocity = move_and_slide(_velocity, Vector3.UP)
 
 func reduce_timers(delta: float):
 	if (_duck_time > 0):
@@ -72,10 +75,46 @@ func player_move(delta):
 	# Todo: Handle water code, ladder code, spectator mode etc.
 	player_move_duck()
 	player_move_add_gravity(delta)
-	player_move_friction()
 	if is_on_floor():
-		player_move_accelerate()
+		# _velocity.y = 0
+		player_move_friction()
+		player_move_walk_move(delta)
+	else:
+		# print("NOT ON FLOOR")
+		player_move_air_move()
 	player_move_jump()
+
+
+func player_move_fly_move():
+	# _velocity = move_and_slide(_velocity, Vector3.UP)
+	return
+
+func player_move_walk_move(delta: float):
+	# todo: limit to server maxspeed
+	# todo: set y velocity to 0 ?
+	player_move_accelerate()
+	# _velocity.y = 0
+	
+	var vel = Vector3(_velocity.x, 0, _velocity.z)
+	var velDelta = vel * delta
+	
+	# Try moving directly to the new spot
+	if !test_move(transform, velDelta):
+		#translation += velDelta
+		# _velocity = move_and_slide(_velocity, Vector3.UP)
+		return
+		
+	# Try walking up stairs etc.
+	move_and_collide(Vector3(0, step_size, 0))
+	_velocity = move_and_slide(_velocity, Vector3.UP)
+	move_and_collide(Vector3(0, -step_size, 0))
+	
+	return
+
+func player_move_air_move():
+	# todo: do all the cool "air move" related stuff
+	player_move_fly_move()
+	return
 
 func player_move_duck():
 	if !(Input.is_action_pressed("duck") or _in_duck or _fully_ducking):
@@ -116,7 +155,7 @@ func player_move_spline_fraction(value: float, scale: float):
 	var valueScaled = scale * value;
 	var valueSquared = valueScaled * valueScaled
 	return 3 * valueSquared - 2 * valueSquared * valueScaled;
-	
+
 func player_move_unduck():
 	if test_move(transform, Vector3(0, 0.9, 0)):
 		# no room to stand up
@@ -128,7 +167,6 @@ func player_move_unduck():
 	_collision_shape.translation.y = 0.9
 	_mesh_instance.mesh.size.y = 1.8
 	_mesh_instance.translation.y = 0.9
-
 	
 	_duck_time = 0
 	_fully_ducking = false
